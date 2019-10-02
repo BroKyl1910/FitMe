@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    tools:context=".RegisterActivity"
     android:orientation="vertical">
-
 
     <ImageView
         android:layout_width="150dp"
@@ -19,8 +18,16 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login to your FitMe! account"
+        android:text="Register for FitMe!"
         android:textAlignment="center"
+        android:textSize="22sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Basic Details"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="8dp"
         android:textSize="22sp"/>
 
     <EditText
@@ -29,9 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
-        android:layout_marginTop="120dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" />
 
     <EditText
         android:id="@+id/edtPassword"
@@ -39,9 +46,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
+    <EditText
+        android:id="@+id/edtConfirmPassword"
+        android:inputType="textPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
     <!--  Empty spacer view  -->
     <View
@@ -64,11 +80,11 @@
             android:layout_margin="1dp"/>
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnNext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Login"
+            android:text="Next"
             style="@style/AccentButton"
             android:layout_margin="1dp"/>
 
