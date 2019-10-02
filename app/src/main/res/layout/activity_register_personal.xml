@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegisterPersonalActivity">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="118dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:tint="#FFFFFF"
+        app:srcCompat="@drawable/fitme_logo_just_shoe" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register for FitMe!"
+        android:textAlignment="center"
+        android:textSize="22sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="60dp"
+                android:text="Personal Details"
+                android:textSize="22sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edtFirstName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="First Name"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edtSurname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="16dp"
+                    android:hint="Surname"
+                    android:inputType="text" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edtHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="16dp"
+                android:hint="Height (cm)"
+                android:inputType="number" />
+
+
+            <EditText
+                android:id="@+id/edtWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:hint="Weight (kg)"
+                android:inputType="number" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="45dp"
+                android:text="Goals"
+                android:textSize="22sp" />
+
+            <EditText
+                android:id="@+id/edtIdealWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="16dp"
+                android:hint="Ideal Weight (kg)"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/edtIdealFootsteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:hint="Ideal number of footsteps per day"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBack"
+            style="@style/AccentButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/btnFinish"
+            style="@style/AccentButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:text="Finish" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

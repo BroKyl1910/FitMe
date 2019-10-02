@@ -24,7 +24,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnNext;
     Button btnCancel;
 
-    private FirebaseAuth firebaseAuth;
 
 
     @Override
@@ -32,13 +31,20 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
         btnNext = findViewById(R.id.btnNext);
         btnCancel = findViewById(R.id.btnCancel);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+
+        Intent i = getIntent();
+        if(i.hasExtra("email")){
+           edtEmail.setText(i.getStringExtra("email"));
+           edtPassword.setText(i.getStringExtra("password"));
+        }
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,12 +54,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,28 +61,17 @@ public class RegisterActivity extends AppCompatActivity {
                     String email = edtEmail.getText().toString();
                     String password = edtPassword.getText().toString();
 
-                    registerUser(email, password);
+                    Intent i = new Intent(RegisterActivity.this, RegisterPersonalActivity.class);
+                    i.putExtra("email", email);
+                    i.putExtra("password", password);
+
+                    startActivity(i);
                 }
             }
         });
 
     }
 
-    private void registerUser(String email, String password) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getBaseContext(), "Registration Successful", Toast.LENGTH_LONG).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getBaseContext(), "Registration Failed", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                });
-    }
 
     private boolean fieldsValid() {
         String password;
