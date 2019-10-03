@@ -21,27 +21,27 @@
         android:layout_height="wrap_content"
         android:text="Login to your FitMe! account"
         android:textAlignment="center"
-        android:textSize="22sp"/>
+        android:textSize="22sp" />
 
     <EditText
         android:id="@+id/edtEmail"
-        android:inputType="textEmailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:layout_marginTop="120dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        android:layout_marginTop="120dp"
+        android:layout_marginRight="8dp"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/edtPassword"
-        android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="8dp"
+        android:hint="Password"
+        android:inputType="textPassword" />
 
     <!--  Empty spacer view  -->
     <View
