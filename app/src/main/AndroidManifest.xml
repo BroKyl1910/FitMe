@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainFragmentHostActivity"></activity>
+        <activity android:name=".NewPostActivity"></activity>
+        <activity android:name=".MainFragmentHostActivity" />
         <activity android:name=".RegisterPersonalActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".SplashActivity">

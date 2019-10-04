@@ -59,9 +59,9 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         if(savedInstanceState==null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_progress);
-            toolbar.setTitle("My Progress");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_feed);
+            toolbar.setTitle("Feed");
         }
     }
 
