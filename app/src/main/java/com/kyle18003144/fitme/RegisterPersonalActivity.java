@@ -42,7 +42,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register_personal);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        databaseReference = FirebaseDatabase.getInstance().getReference("User");
 
         intent = getIntent();
 
