@@ -36,7 +36,7 @@ public class ProfileFragment extends Fragment {
         isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
 
         txtName = rootView.findViewById(R.id.txtName);
-        txtEmail = rootView.findViewById(R.id.txtEmail);
+        txtEmail = rootView.findViewById(R.id.edtEmail);
         txtStepGoal = rootView.findViewById(R.id.txtStepGoal);
         txtWeightGoal = rootView.findViewById(R.id.txtWeightGoal);
         Log.d("UserFound", "Create");
@@ -70,7 +70,7 @@ public class ProfileFragment extends Fragment {
                         break;
                     }
                 }
-                
+
                 txtName.setText(user.getFirstName()+" "+user.getSurname());
                 txtEmail.setText(user.getEmail());
                 txtStepGoal.setText(((isImperial)?convertToImperial(user.getFootstepsGoal()):user.getFootstepsGoal())+"");
