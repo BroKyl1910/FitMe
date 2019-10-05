@@ -58,70 +58,97 @@ public class ProgressWeightFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         final String userEmail = mAuth.getCurrentUser().getEmail();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Post");
+        DatabaseReference userReference = database.getReference("User");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        userReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<AppPost> posts = new ArrayList<>();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                AppUser user = new AppUser();
                 for(DataSnapshot child: dataSnapshot.getChildren()){
-                    AppPost post = child.getValue(AppPost.class);
-                    if(post.getEmail().equals(userEmail) && post.getPostType()==PostType.WEIGHT){
-                        posts.add(post);
+                    user = child.getValue(AppUser.class);
+                    if(user.getEmail().equals(userEmail)){
+                        break;
                     }
                 }
 
-                GraphView graphView = rootView.findViewById(R.id.grphWeight);
-                LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
-                for(int i = 0; i < posts.size(); i++){
-                    double weight = (SharedPrefsHelper.getImperial(rootView.getContext()))?posts.get(i).getPostValue()*2.20462:posts.get(i).getPostValue();
-                    series.appendData(new DataPoint(i+1, weight), true, posts.size());
-                    goal.appendData(new DataPoint(i+1, 50), true, posts.size());
-                }
-                graphView.addSeries(series);
-                graphView.addSeries(goal);
 
-                series.setColor(Color.CYAN);
-                series.setTitle("Weight");
-                series.setDrawDataPoints(true);
-                series.setThickness(2);
+                DatabaseReference postReference = database.getReference("Post");
 
-                goal.setColor(Color.GREEN);
-                goal.setThickness(2);
-                goal.setTitle("Goal");
-
-                graphView.getLegendRenderer().setVisible(true);
-                graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                graphView.getLegendRenderer().setSpacing(16);
-
-                GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
-                gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.NONE);
-                gridLabelRenderer.setHorizontalLabelsVisible(false);
-                gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
+                final AppUser finalUser = user;
+                postReference.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public String formatLabel(double value, boolean isValueX) {
-                        if (isValueX) {
-                            // show normal x values
-                            return super.formatLabel(value, isValueX);
-                        } else {
-                            // show currency for y values
-                            return super.formatLabel(value, isValueX) + " "+(SharedPrefsHelper.getImperial(rootView.getContext())?"lbs":"kg");
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<AppPost> posts = new ArrayList<>();
+                        for(DataSnapshot child: dataSnapshot.getChildren()){
+                            AppPost post = child.getValue(AppPost.class);
+                            if(post.getEmail().equals(userEmail) && post.getPostType()==PostType.WEIGHT){
+                                posts.add(post);
+                            }
                         }
+
+                        GraphView graphView = rootView.findViewById(R.id.grphWeight);
+                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
+                        LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
+                        boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
+                        double goalWeight = (isImperial)?finalUser.getWeightGoal()*2.20462:finalUser.getWeightGoal();
+                        for(int i = 0; i < posts.size(); i++){
+                            double weight = (isImperial)?posts.get(i).getPostValue()*2.20462:posts.get(i).getPostValue();
+                            series.appendData(new DataPoint(i+1, weight), true, posts.size());
+                            goal.appendData(new DataPoint(i+1, goalWeight), true, posts.size());
+                        }
+
+                        graphView.addSeries(series);
+                        graphView.addSeries(goal);
+
+                        series.setColor(Color.CYAN);
+                        series.setTitle("Weight");
+                        series.setDrawDataPoints(true);
+                        series.setThickness(2);
+
+                        goal.setColor(Color.GREEN);
+                        goal.setThickness(2);
+                        goal.setTitle("Goal");
+
+                        graphView.getLegendRenderer().setVisible(true);
+                        graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+                        graphView.getLegendRenderer().setSpacing(16);
+
+                        GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
+                        gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.NONE);
+                        gridLabelRenderer.setHorizontalLabelsVisible(false);
+                        gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
+                            @Override
+                            public String formatLabel(double value, boolean isValueX) {
+                                if (isValueX) {
+                                    // show normal x values
+                                    return super.formatLabel(value, isValueX);
+                                } else {
+                                    // show currency for y values
+                                    return super.formatLabel(value, isValueX) + " "+(SharedPrefsHelper.getImperial(rootView.getContext())?"lbs":"kg");
+                                }
+                            }
+                        });
+
+                        graphView.setVisibility(View.VISIBLE);
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w("TAG", "Failed to read value.", error.toException());
                     }
                 });
 
-                graphView.setVisibility(View.VISIBLE);
-
-
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("TAG", "Failed to read value.", error.toException());
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
+
 
 
 

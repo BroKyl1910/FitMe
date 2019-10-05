@@ -99,7 +99,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 
                             String containerID = databaseReference.push().getKey();
-                            AppUser appUser = new AppUser(user.getEmail(), edtFirstName.getText().toString().trim(), edtSurname.getText().toString().trim(), Integer.parseInt(edtHeight.getText().toString()), Integer.parseInt(edtWeight.getText().toString()), Integer.parseInt(edtIdealWeight.getText().toString()),Integer.parseInt(edtIdealFootsteps.getText().toString()), containerID);
+                            AppUser appUser = new AppUser(user.getEmail(), edtFirstName.getText().toString().trim(), edtSurname.getText().toString().trim(), Integer.parseInt(edtHeight.getText().toString()), Integer.parseInt(edtWeight.getText().toString()),Integer.parseInt(edtIdealFootsteps.getText().toString()), Integer.parseInt(edtIdealWeight.getText().toString()), containerID);
 
                             databaseReference.child(containerID).setValue(appUser);
                             Toast.makeText(getBaseContext(),"Upload successful", Toast.LENGTH_LONG).show();

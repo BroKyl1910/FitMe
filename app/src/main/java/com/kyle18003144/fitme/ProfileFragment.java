@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment {
                 txtName.setText(user.getFirstName()+" "+user.getSurname());
                 txtEmail.setText(user.getEmail());
                 txtStepGoal.setText(user.getFootstepsGoal()+"");
-                txtWeightGoal.setText(((isImperial)?convertToImperial(user.getWeightGoal()):user.getWeightGoal())+"");
+                txtWeightGoal.setText(((isImperial)?convertToImperial(user.getWeightGoal())+" lbs":user.getWeightGoal())+" kg");
 
                 DatabaseReference postReference = database.getReference("Post");
 
