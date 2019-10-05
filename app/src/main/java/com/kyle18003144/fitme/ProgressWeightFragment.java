@@ -75,7 +75,8 @@ public class ProgressWeightFragment extends Fragment {
                 LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                 LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
                 for(int i = 0; i < posts.size(); i++){
-                    series.appendData(new DataPoint(i+1, posts.get(i).getPostValue()), true, posts.size());
+                    double weight = (SharedPrefsHelper.getImperial(rootView.getContext()))?posts.get(i).getPostValue()*2.20462:posts.get(i).getPostValue();
+                    series.appendData(new DataPoint(i+1, weight), true, posts.size());
                     goal.appendData(new DataPoint(i+1, 50), true, posts.size());
                 }
                 graphView.addSeries(series);
@@ -105,10 +106,12 @@ public class ProgressWeightFragment extends Fragment {
                             return super.formatLabel(value, isValueX);
                         } else {
                             // show currency for y values
-                            return super.formatLabel(value, isValueX) + " kg";
+                            return super.formatLabel(value, isValueX) + " "+(SharedPrefsHelper.getImperial(rootView.getContext())?"lbs":"kg");
                         }
                     }
                 });
+
+                graphView.setVisibility(View.VISIBLE);
 
 
             }

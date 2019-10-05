@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,9 +60,9 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         toggle.syncState();
 
         if(savedInstanceState==null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_feed);
-            toolbar.setTitle("Feed");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_profile);
+            toolbar.setTitle("My Profile");
         }
     }
 
@@ -86,6 +87,7 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
                 break;
             case R.id.nav_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
                 toolbar.setTitle("My Profile");
                 break;
             case R.id.nav_friends:
@@ -95,6 +97,10 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
             case R.id.nav_progress:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();
                 toolbar.setTitle("My Progress");
+                break;
+            case R.id.nav_settings:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                toolbar.setTitle("Settings");
                 break;
         }
 

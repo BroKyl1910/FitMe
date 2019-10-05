@@ -70,6 +70,10 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
         edtWeight = findViewById(R.id.edtWeight);
         prgLoading = findViewById(R.id.prgLoading);
 
+        if(SharedPrefsHelper.getImperial(getBaseContext())){
+            edtWeight.setHint("New Weight (lbs)");
+        }
+
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Post");
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -110,7 +114,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                 post.setTitle(title);
                 post.setPostBody(body);
                 post.setPostType(PostType.WEIGHT);
-                post.setPostValue(weight);
+                post.setPostValue((SharedPrefsHelper.getImperial(getBaseContext()))?weight*0.453592:weight);
                 post.setContainerID(databaseReference.push().getKey());
                 post.setDate(new Date());
 
@@ -181,63 +185,4 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
         }
     }
 
-    private class CreatePost extends AsyncTask<Void, Void, Void> {
-
-        AppPost post;
-
-        public CreatePost() {
-            post = new AppPost();
-        }
-
-        CreatePost(AppPost post){
-            this.post = post;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            btnSave.setVisibility(View.GONE);
-            prgLoading.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            //Set up blob
-            if(hasImage){
-                storageReference = storageReference.child("Posts").child(System.currentTimeMillis()+".jpg");
-                storageReference.putFile(imageUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Get a URL to the uploaded content
-                                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                                post.setPostImageURI(downloadUrl.toString());
-                                Toast.makeText(NewPostActivity.this, "Image Saved", Toast.LENGTH_SHORT).show();
-
-                                databaseReference.child(post.getContainerID()).setValue(post);
-                                Toast.makeText(NewPostActivity.this, "Post Saved", Toast.LENGTH_SHORT).show();
-
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                Log.d("downloadURI", exception.toString());
-
-                            }
-                        });
-            } else{
-                databaseReference.child(post.getContainerID()).setValue(post);
-                Toast.makeText(NewPostActivity.this, "Post Saved", Toast.LENGTH_SHORT).show();
-
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            btnSave.setVisibility(View.VISIBLE);
-            prgLoading.setVisibility(View.GONE);
-        }
-    }
 }
