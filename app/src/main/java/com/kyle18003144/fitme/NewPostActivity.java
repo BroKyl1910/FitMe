@@ -123,19 +123,26 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                 prgLoading.setVisibility(View.VISIBLE);
 
                 if(hasImage){
-                    storageReference = storageReference.child("Posts").child(System.currentTimeMillis()+".jpg");
+                    final String imageName = System.currentTimeMillis()+"";
+                    storageReference = storageReference.child("Posts").child(imageName+".jpg");
                     storageReference.putFile(imageUri)
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     // Get a URL to the uploaded content
-                                    Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                                    post.setPostImageURI(downloadUrl.toString());
-                                    Toast.makeText(NewPostActivity.this, "Image Saved", Toast.LENGTH_SHORT).show();
+                                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            post.setPostImageURI(uri.toString());
+                                            Toast.makeText(NewPostActivity.this, "Image Saved", Toast.LENGTH_SHORT).show();
 
-                                    databaseReference.child(post.getContainerID()).setValue(post);
-                                    Toast.makeText(NewPostActivity.this, "Post Saved", Toast.LENGTH_SHORT).show();
+                                            databaseReference.child(post.getContainerID()).setValue(post);
+                                            Toast.makeText(NewPostActivity.this, "Post Saved", Toast.LENGTH_SHORT).show();
 
+                                            btnSave.setVisibility(View.VISIBLE);
+                                            prgLoading.setVisibility(View.GONE);
+                                        }
+                                    });
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
