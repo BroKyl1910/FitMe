@@ -41,8 +41,6 @@ public class ProfileFragment extends Fragment {
         txtWeightGoal = rootView.findViewById(R.id.txtWeightGoal);
         Log.d("UserFound", "Create");
 
-        //Added from laptop
-
         //Get user
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
