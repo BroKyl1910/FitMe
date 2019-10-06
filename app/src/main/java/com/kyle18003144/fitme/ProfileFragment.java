@@ -27,9 +27,10 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static android.widget.LinearLayout.VERTICAL;
-import static com.kyle18003144.fitme.ImperialHelper.convertToImperial;
+import static com.kyle18003144.fitme.ImperialHelper.convertToImperialLbs;
 
 
 public class ProfileFragment extends Fragment {
@@ -39,6 +40,7 @@ public class ProfileFragment extends Fragment {
     TextView txtStepGoal;
     TextView txtWeightGoal;
     LinearLayout lytCardHost;
+    LinearLayout lyoutLabels;
 
     ImageView imgEdit;
 
@@ -56,9 +58,8 @@ public class ProfileFragment extends Fragment {
         txtStepGoal = rootView.findViewById(R.id.txtStepGoal);
         txtWeightGoal = rootView.findViewById(R.id.txtWeightGoal);
         imgEdit = rootView.findViewById(R.id.imgEdit);
-
         lytCardHost = rootView.findViewById(R.id.lytCardHost);
-        Log.d("UserFound", "Create");
+        lyoutLabels = rootView.findViewById(R.id.lyoutLabels);
 
         //Get user
         FirebaseAuth mAuth;
@@ -67,7 +68,6 @@ public class ProfileFragment extends Fragment {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         Log.d("UserFound", "Email: "+userEmail);
         DatabaseReference userReference = database.getReference("User");
-        final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         imgEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +85,6 @@ public class ProfileFragment extends Fragment {
                 for(DataSnapshot child: dataSnapshot.getChildren()){
                     user = child.getValue(AppUser.class);
                     if(user.getEmail().equals(userEmail)){
-                        Log.d("UserFound", "USER FOUND");
-                        Log.d("UserFound", userEmail);
                         break;
                     }
                 }
@@ -95,7 +93,8 @@ public class ProfileFragment extends Fragment {
                 txtName.setText(user.getFirstName()+" "+user.getSurname());
                 txtEmail.setText(user.getEmail());
                 txtStepGoal.setText(user.getFootstepsGoal()+"");
-                txtWeightGoal.setText(((isImperial)?convertToImperial(user.getWeightGoal())+" lbs":user.getWeightGoal()+" kg"));
+                txtWeightGoal.setText(((isImperial)? convertToImperialLbs(user.getWeightGoal()):user.getWeightGoal()+" kg"));
+                lyoutLabels.setVisibility(View.VISIBLE);
 
                 DatabaseReference postReference = database.getReference("Post");
 
@@ -110,6 +109,8 @@ public class ProfileFragment extends Fragment {
                             }
                         }
 
+                        //Show posts in the order of newest first
+                        Collections.reverse(posts);
 
                         for (AppPost post : posts){
                             LinearLayout postLayout = new LinearLayout(rootView.getContext());
@@ -129,7 +130,7 @@ public class ProfileFragment extends Fragment {
                             postLayout.addView(txtTitle);
 
                             TextView txtProgress = new TextView(rootView.getContext());
-                            String weight = (isImperial)?convertToImperial(post.getPostValue())+" lbs":post.getPostValue()+" kg";
+                            String weight = (isImperial)? convertToImperialLbs(post.getPostValue()):post.getPostValue()+" kg";
                             txtProgress.setText("Weight Progress: "+ weight);
                             LinearLayout.LayoutParams txtProgressParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             txtProgressParams.topMargin = 8;
@@ -161,7 +162,7 @@ public class ProfileFragment extends Fragment {
                             String dateStr = formatter.format(post.getDate());
                             txtDate.setText(dateStr);
                             LinearLayout.LayoutParams txtDateParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            txtDateParams.topMargin = 16;
+                            txtDateParams.topMargin = 100;
                             txtDate.setLayoutParams(txtDateParams);
                             txtDate.setTextAppearance(rootView.getContext(), R.style.TextAppearance_MaterialComponents_Body2);
                             postLayout.addView(txtDate);

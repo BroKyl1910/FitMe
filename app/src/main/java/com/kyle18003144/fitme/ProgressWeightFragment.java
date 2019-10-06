@@ -90,9 +90,9 @@ public class ProgressWeightFragment extends Fragment {
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                         LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
                         boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
-                        double goalWeight = (isImperial)?finalUser.getWeightGoal()*2.20462:finalUser.getWeightGoal();
+                        double goalWeight = (isImperial)?ImperialHelper.convertToImperial(finalUser.getWeightGoal()):finalUser.getWeightGoal();
                         for(int i = 0; i < posts.size(); i++){
-                            double weight = (isImperial)?posts.get(i).getPostValue()*2.20462:posts.get(i).getPostValue();
+                            double weight = (isImperial)?ImperialHelper.convertToImperial(posts.get(i).getPostValue()):posts.get(i).getPostValue();
                             series.appendData(new DataPoint(i+1, weight), true, posts.size());
                             goal.appendData(new DataPoint(i+1, goalWeight), true, posts.size());
                         }

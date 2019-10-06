@@ -9,6 +9,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -42,6 +43,8 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_fragment_host);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         txtFootsteps = findViewById(R.id.txtFootsteps);
 
@@ -121,6 +124,10 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
                 toolbar.setTitle("Settings");
                 break;
+            case R.id.nav_log_out:
+                firebaseAuth.signOut();
+                Intent i = new Intent(MainFragmentHostActivity.this, SplashActivity.class);
+                startActivity(i);
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

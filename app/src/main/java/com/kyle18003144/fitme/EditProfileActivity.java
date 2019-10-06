@@ -69,7 +69,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 edtIdealFootsteps.setText(((int)appUser.getFootstepsGoal())+"");
                 String unit = (isImperial)? "(lbs)":"(kg)";
                 txtWeightGoalLabel.setText("Ideal Weight "+unit);
-                edtIdealWeight.setText((isImperial)?(int)ImperialHelper.convertToImperial(appUser.getWeight())+"":(int)appUser.getWeight()+"");
+                edtIdealWeight.setText((isImperial)?ImperialHelper.convertToImperial(appUser.getWeight())+"":(int)appUser.getWeight()+"");
 
                 final AppUser finalAppUser = appUser;
                 btnSave.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +79,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             finalAppUser.setFirstName(edtFirstName.getText().toString());
                             finalAppUser.setSurname(edtSurname.getText().toString());
                             finalAppUser.setFootstepsGoal(Integer.parseInt(edtIdealFootsteps.getText().toString()));
-                            int weight = (int) ((isImperial)?ImperialHelper.convertToMetric(Integer.parseInt(edtIdealWeight.getText().toString())):Integer.parseInt(edtIdealWeight.getText().toString()));
+                            int weight = ((isImperial)?ImperialHelper.convertToMetric(Integer.parseInt(edtIdealWeight.getText().toString())):Integer.parseInt(edtIdealWeight.getText().toString()));
                             finalAppUser.setWeightGoal(weight);
 
                             databaseReference.child(finalAppUser.getContainerID()).setValue(finalAppUser);
