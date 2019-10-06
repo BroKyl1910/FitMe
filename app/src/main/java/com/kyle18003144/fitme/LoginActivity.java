@@ -35,9 +35,6 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnCancel = findViewById(R.id.btnCancel);
 
-        edtEmail.setText("brooks.kyle621@gmail.com");
-        edtPassword.setText("12345678");
-
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();
 

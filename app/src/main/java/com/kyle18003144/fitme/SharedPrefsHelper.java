@@ -23,7 +23,7 @@ public class SharedPrefsHelper {
 
     public static boolean getRememberMe(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(REMEMBER_PREF_NAME, MODE_PRIVATE);
-        boolean remember = prefs.getBoolean("remember", false);
+        boolean remember = prefs.getBoolean("remember", true);
         return remember;
     }
 

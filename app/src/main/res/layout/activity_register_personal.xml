@@ -32,14 +32,40 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="60dp"
-                android:text="Personal Details"
-                android:textSize="22sp" />
+
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="Personal Details"
+                    android:textSize="22sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Imperial"/>
+
+                <Switch
+                    android:id="@+id/swtchImperial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

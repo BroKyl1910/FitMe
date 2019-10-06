@@ -97,8 +97,8 @@
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_weight="1"
-                    android:visibility="invisible"
-                    android:gravity="left"/>
+                    android:gravity="left"
+                    android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -109,27 +109,46 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnSave"
+            style="@style/AccentButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/AccentButton"
             android:text="Save" />
 
-        <ProgressBar
-            android:id="@+id/prgLoading"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"/>
+            android:orientation="horizontal"
+            android:id="@+id/lytLoading"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginBottom="8dp"
+                android:indeterminate="true" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

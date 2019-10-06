@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
     ImageView imgUpload;
     ImageView imgUserImage;
     Button btnSave;
-    ProgressBar prgLoading;
+    LinearLayout lytLoading;
 
     EditText edtTitle;
     EditText edtBody;
@@ -64,7 +65,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
         edtTitle = findViewById(R.id.edtTitle);
         edtBody = findViewById(R.id.edtBody);
         edtWeight = findViewById(R.id.edtWeight);
-        prgLoading = findViewById(R.id.prgLoading);
+        lytLoading = findViewById(R.id.lytLoading);
 
         if(SharedPrefsHelper.getImperial(getBaseContext())){
             edtWeight.setHint("New Weight (lbs)");
@@ -116,7 +117,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
 
 //                new CreatePost(post).execute();
                 btnSave.setVisibility(View.GONE);
-                prgLoading.setVisibility(View.VISIBLE);
+                lytLoading.setVisibility(View.VISIBLE);
 
                 if(hasImage){
                     final String imageName = System.currentTimeMillis()+"";
@@ -136,7 +137,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                                             Toast.makeText(NewPostActivity.this, "Post Saved", Toast.LENGTH_SHORT).show();
 
                                             btnSave.setVisibility(View.VISIBLE);
-                                            prgLoading.setVisibility(View.GONE);
+                                            lytLoading.setVisibility(View.GONE);
 
                                             Intent i = new Intent(NewPostActivity.this, MainFragmentHostActivity.class);
                                             i.putExtra("fragment", R.id.nav_profile);
@@ -152,7 +153,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                                     Log.d("downloadURI", exception.toString());
 
                                     btnSave.setVisibility(View.VISIBLE);
-                                    prgLoading.setVisibility(View.GONE);
+                                    lytLoading.setVisibility(View.GONE);
                                 }
                             });
                 } else{
@@ -160,7 +161,11 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                     Toast.makeText(NewPostActivity.this, "Post Saved", Toast.LENGTH_SHORT).show();
 
                     btnSave.setVisibility(View.VISIBLE);
-                    prgLoading.setVisibility(View.GONE);
+                    lytLoading.setVisibility(View.GONE);
+
+                    Intent i = new Intent(NewPostActivity.this, MainFragmentHostActivity.class);
+                    i.putExtra("fragment", R.id.nav_profile);
+                    startActivity(i);
                 }
             }
         });

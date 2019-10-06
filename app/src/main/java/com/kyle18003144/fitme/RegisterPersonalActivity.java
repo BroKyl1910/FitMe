@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +27,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
     EditText edtWeight;
     EditText edtIdealWeight;
     EditText edtIdealFootsteps;
+    Switch swtchImperial;
 
     Button btnBack;
     Button btnFinish;
@@ -33,6 +35,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
 
+    boolean useImperial = false;
     Intent intent;
 
 
@@ -52,6 +55,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
         edtWeight = findViewById(R.id.edtWeight);
         edtIdealWeight = findViewById(R.id.edtIdealWeight);
         edtIdealFootsteps = findViewById(R.id.edtIdealFootsteps);
+        swtchImperial = findViewById(R.id.swtchImperial);
         btnBack = findViewById(R.id.btnBack);
         btnFinish = findViewById(R.id.btnFinish);
 
@@ -65,6 +69,27 @@ public class RegisterPersonalActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        swtchImperial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(swtchImperial.isChecked()){
+                    useImperial = true;
+                    SharedPrefsHelper.setImperial(getBaseContext(), true);
+                    edtHeight.setHint("Height (inches)");
+                    edtWeight.setHint("Weight (lbs)");
+                    edtIdealWeight.setHint("Ideal Weight (lbs)");
+                } else{
+                    useImperial = false;
+                    SharedPrefsHelper.setImperial(getBaseContext(), false);
+                    edtHeight.setHint("Height (cm)");
+                    edtWeight.setHint("Weight (kg)");
+                    edtIdealWeight.setHint("Ideal Weight (kg)");
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -99,7 +124,16 @@ public class RegisterPersonalActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
 
                             String containerID = databaseReference.push().getKey();
-                            AppUser appUser = new AppUser(user.getEmail(), edtFirstName.getText().toString().trim(), edtSurname.getText().toString().trim(), Integer.parseInt(edtHeight.getText().toString()), Integer.parseInt(edtWeight.getText().toString()),Integer.parseInt(edtIdealFootsteps.getText().toString()), Integer.parseInt(edtIdealWeight.getText().toString()), containerID);
+                            AppUser appUser = new AppUser();
+                            appUser.setEmail(user.getEmail());
+                            appUser.setFirstName(edtFirstName.getText().toString().trim());
+                            appUser.setSurname(edtSurname.getText().toString().trim());
+                            appUser.setHeight((useImperial)?UnitsHelper.convertToMetricHeight(Integer.parseInt(edtHeight.getText().toString())):Integer.parseInt(edtHeight.getText().toString()));
+                            appUser.setWeight((useImperial)?UnitsHelper.convertToMetricWeight(Integer.parseInt(edtWeight.getText().toString())):Integer.parseInt(edtWeight.getText().toString()));
+                            appUser.setWeightGoal((useImperial)?UnitsHelper.convertToMetricWeight(Integer.parseInt(edtIdealWeight.getText().toString())):Integer.parseInt(edtIdealWeight.getText().toString()));
+                            appUser.setFootstepsGoal(Integer.parseInt(edtIdealFootsteps.getText().toString()));
+                            appUser.setContainerID(containerID);
+
 
                             databaseReference.child(containerID).setValue(appUser);
                             Toast.makeText(getBaseContext(),"Upload successful", Toast.LENGTH_LONG).show();

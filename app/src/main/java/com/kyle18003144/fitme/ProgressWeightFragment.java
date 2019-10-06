@@ -83,11 +83,14 @@ public class ProgressWeightFragment extends Fragment {
                             }
                         }
 
+                        boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
                         GraphView graphView = rootView.findViewById(R.id.grphWeight);
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                         LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
-                        boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
+                        double startingWeight = ((isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeight()):finalUser.getWeight());
+                        series.appendData(new DataPoint(0, startingWeight), true, posts.size()+1);
                         double goalWeight = (isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeightGoal()):finalUser.getWeightGoal();
+                        goal.appendData(new DataPoint(0, goalWeight), true, posts.size()+1);
                         for(int i = 0; i < posts.size(); i++){
                             double weight = (isImperial)? UnitsHelper.convertToImperialWeight(posts.get(i).getPostValue()):posts.get(i).getPostValue();
                             series.appendData(new DataPoint(i+1, weight), true, posts.size());
@@ -126,7 +129,9 @@ public class ProgressWeightFragment extends Fragment {
                             }
                         });
 
-                        graphView.setVisibility(View.VISIBLE);
+                        if(posts.size() > 0){
+                            graphView.setVisibility(View.VISIBLE);
+                        }
 
 
                     }
