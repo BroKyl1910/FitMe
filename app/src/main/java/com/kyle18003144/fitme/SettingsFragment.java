@@ -34,7 +34,7 @@ public class SettingsFragment extends Fragment {
         swtchImperial.setChecked(useImperial);
 
         boolean remember = SharedPrefsHelper.getRememberMe(rootView.getContext());
-        swtchImperial.setChecked(remember);
+        swtchRemember.setChecked(remember);
 
         //Change setting when switch is checked or unchecked
         swtchImperial.setOnClickListener(new View.OnClickListener() {
