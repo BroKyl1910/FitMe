@@ -83,7 +83,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(NewPostActivity.this, MainFragmentHostActivity.class);
-                i.putExtra("fragment", "Progress");
+                i.putExtra("fragment", R.id.nav_progress);
                 startActivity(i);
             }
         });
@@ -114,7 +114,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                 post.setTitle(title);
                 post.setPostBody(body);
                 post.setPostType(PostType.WEIGHT);
-                post.setPostValue((SharedPrefsHelper.getImperial(getBaseContext()))?weight*0.453592:weight);
+                post.setPostValue((SharedPrefsHelper.getImperial(getBaseContext()))?ImperialHelper.convertToMetric(weight):weight);
                 post.setContainerID(databaseReference.push().getKey());
                 post.setDate(new Date());
 
@@ -141,6 +141,11 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
 
                                             btnSave.setVisibility(View.VISIBLE);
                                             prgLoading.setVisibility(View.GONE);
+
+                                            Intent i = new Intent(NewPostActivity.this, MainFragmentHostActivity.class);
+                                            i.putExtra("fragment", R.id.nav_profile);
+                                            startActivity(i);
+
                                         }
                                     });
                                 }

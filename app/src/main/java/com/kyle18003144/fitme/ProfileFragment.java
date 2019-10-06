@@ -1,6 +1,6 @@
 package com.kyle18003144.fitme;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,24 +15,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static android.widget.LinearLayout.VERTICAL;
+import static com.kyle18003144.fitme.ImperialHelper.convertToImperial;
 
 
 public class ProfileFragment extends Fragment {
@@ -42,6 +39,8 @@ public class ProfileFragment extends Fragment {
     TextView txtStepGoal;
     TextView txtWeightGoal;
     LinearLayout lytCardHost;
+
+    ImageView imgEdit;
 
     boolean isImperial;
 
@@ -56,6 +55,8 @@ public class ProfileFragment extends Fragment {
         txtEmail = rootView.findViewById(R.id.txtEmail);
         txtStepGoal = rootView.findViewById(R.id.txtStepGoal);
         txtWeightGoal = rootView.findViewById(R.id.txtWeightGoal);
+        imgEdit = rootView.findViewById(R.id.imgEdit);
+
         lytCardHost = rootView.findViewById(R.id.lytCardHost);
         Log.d("UserFound", "Create");
 
@@ -68,12 +69,13 @@ public class ProfileFragment extends Fragment {
         DatabaseReference userReference = database.getReference("User");
         final StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-
-        //Get user posts
-
-        //Get picture from post
-
-        //Add post to Layout
+        imgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), EditProfileActivity.class);
+                startActivity(i);
+            }
+        });
 
         userReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -93,7 +95,7 @@ public class ProfileFragment extends Fragment {
                 txtName.setText(user.getFirstName()+" "+user.getSurname());
                 txtEmail.setText(user.getEmail());
                 txtStepGoal.setText(user.getFootstepsGoal()+"");
-                txtWeightGoal.setText(((isImperial)?convertToImperial(user.getWeightGoal())+" lbs":user.getWeightGoal())+" kg");
+                txtWeightGoal.setText(((isImperial)?convertToImperial(user.getWeightGoal())+" lbs":user.getWeightGoal()+" kg"));
 
                 DatabaseReference postReference = database.getReference("Post");
 
@@ -126,7 +128,8 @@ public class ProfileFragment extends Fragment {
                             postLayout.addView(txtTitle);
 
                             TextView txtProgress = new TextView(rootView.getContext());
-                            txtProgress.setText("Weight Progress: "+((isImperial)?convertToImperial(post.getPostValue())+" lbs":post.getPostValue()+" kg"));
+                            String weight = (isImperial)?convertToImperial(post.getPostValue())+" lbs":post.getPostValue()+" kg";
+                            txtProgress.setText("Weight Progress: "+ weight);
                             LinearLayout.LayoutParams txtProgressParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             txtProgressParams.topMargin = 8;
                             txtProgress.setLayoutParams(txtProgressParams);
@@ -152,6 +155,16 @@ public class ProfileFragment extends Fragment {
                                 postLayout.addView(imgImage);
                             }
 
+                            TextView txtDate = new TextView(rootView.getContext());
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                            String dateStr = formatter.format(post.getDate());
+                            txtDate.setText(dateStr);
+                            LinearLayout.LayoutParams txtDateParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            txtDateParams.topMargin = 16;
+                            txtDate.setLayoutParams(txtDateParams);
+                            txtDate.setTextAppearance(rootView.getContext(), R.style.TextAppearance_MaterialComponents_Body2);
+                            postLayout.addView(txtDate);
+
 
                             lytCardHost.addView(postLayout);
                         }
@@ -173,9 +186,5 @@ public class ProfileFragment extends Fragment {
 
 
         return rootView;
-    }
-
-    private double convertToImperial(double metric){
-        return metric * 2.20462;
     }
 }

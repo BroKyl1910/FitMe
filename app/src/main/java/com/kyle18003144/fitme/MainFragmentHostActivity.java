@@ -59,10 +59,30 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        if(savedInstanceState==null){
+        boolean specificFragment = getIntent().getIntExtra("fragment", -1) != -1;
+        if (savedInstanceState == null && !specificFragment) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_profile);
             toolbar.setTitle("My Profile");
+        } else if (specificFragment) {
+            // If another activity was opened and the user went back, should take them to the fragment where they started the new activity
+            int fragment = getIntent().getIntExtra("fragment", 0);
+            switch (fragment) {
+                case R.id.nav_profile:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                    navigationView.setCheckedItem(R.id.nav_profile);
+                    toolbar.setTitle("My Profile");
+                    break;
+                case R.id.nav_progress:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();
+                    navigationView.setCheckedItem(R.id.nav_progress);
+                    toolbar.setTitle("My Progress");
+                    break;
+                default:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
+                    navigationView.setCheckedItem(R.id.nav_feed);
+                    toolbar.setTitle("Feed");
+            }
         }
     }
 
@@ -80,14 +100,13 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.nav_feed:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FeedFragment()).commit();
                 toolbar.setTitle("Feed");
                 break;
             case R.id.nav_profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-                Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show();
                 toolbar.setTitle("My Profile");
                 break;
             case R.id.nav_friends:
@@ -110,15 +129,15 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        }else {
+        } else {
             super.onBackPressed();
         }
 
     }
 
-    private void getUser(){
+    private void getUser() {
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         firebaseAuth = FirebaseAuth.getInstance();
         final String currentUserEmail = firebaseAuth.getCurrentUser().getEmail();
@@ -126,10 +145,10 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot child : dataSnapshot.getChildren()){
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     AppUser user = child.getValue(AppUser.class);
 
-                    if(user.getEmail().equals(currentUserEmail)){
+                    if (user.getEmail().equals(currentUserEmail)) {
 //                        txtOutput.setText("Welcome "+user.getFirstName()+" "+user.getSurname());
                         break;
                     }
@@ -147,13 +166,13 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
     @Override
     public void onSensorChanged(SensorEvent e) {
         if (e.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            numSteps = (int)e.values [0];// - counterSteps;
+            numSteps = (int) e.values[0];// - counterSteps;
             updateUI();
         }
     }
 
     private void updateUI() {
-        txtFootsteps.setText(numSteps+"");
+        txtFootsteps.setText(numSteps + "");
     }
 
     @Override

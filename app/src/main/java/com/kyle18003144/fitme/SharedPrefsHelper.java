@@ -19,4 +19,5 @@ public class SharedPrefsHelper {
         editor.putBoolean("imperial", useImperial);
         editor.apply();
     }
+
 }
