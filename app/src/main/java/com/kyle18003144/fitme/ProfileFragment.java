@@ -110,6 +110,7 @@ public class ProfileFragment extends Fragment {
                             }
                         }
 
+
                         for (AppPost post : posts){
                             LinearLayout postLayout = new LinearLayout(rootView.getContext());
                             postLayout.setOrientation(VERTICAL);

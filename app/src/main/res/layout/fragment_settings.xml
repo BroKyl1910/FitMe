@@ -28,5 +28,27 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Keep me logged in"
+            android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            android:layout_gravity="start"/>
+
+        <Switch
+            android:id="@+id/swtchRemember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>
