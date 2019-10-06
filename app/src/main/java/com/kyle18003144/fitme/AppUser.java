@@ -4,7 +4,7 @@ public class AppUser {
     private String email;
     private String firstName;
     private String surname;
-    private int height;
+    private double height;
     private double weight;
     private int footstepsGoal;
     private double weightGoal;
@@ -13,7 +13,7 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(String email, String firstName, String surname, int height, double weight, int footstepsGoal, double weightGoal, String containerID) {
+    public AppUser(String email, String firstName, String surname, double height, double weight, int footstepsGoal, double weightGoal, String containerID) {
         this.email = email;
         this.firstName = firstName;
         this.surname = surname;
@@ -48,11 +48,11 @@ public class AppUser {
         this.surname = surname;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 

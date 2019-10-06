@@ -75,8 +75,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 edtHeight.setText((isImperial)? UnitsHelper.convertToImperialHeight(appUser.getHeight())+"":(int)appUser.getHeight()+"");
                 edtIdealFootsteps.setText(((int)appUser.getFootstepsGoal())+"");
                 String weightUnit = (isImperial)? "(lbs)":"(kg)";
-                txtWeightGoalLabel.setText("Ideal Weight "+weightUnit);
-                edtIdealWeight.setText((isImperial)? UnitsHelper.convertToImperialWeight(appUser.getWeight())+"":(int)appUser.getWeight()+"");
+                txtWeightGoalLabel.setText("Weight Goal "+weightUnit);
+                edtIdealWeight.setText((isImperial)? UnitsHelper.convertToImperialWeight(appUser.getWeightGoal())+"":(int)appUser.getWeightGoal()+"");
 
                 final AppUser finalAppUser = appUser;
 
