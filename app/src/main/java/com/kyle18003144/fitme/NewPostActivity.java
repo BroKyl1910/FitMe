@@ -110,7 +110,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
                 post.setTitle(title);
                 post.setPostBody(body);
                 post.setPostType(PostType.WEIGHT);
-                post.setPostValue((SharedPrefsHelper.getImperial(getBaseContext()))?ImperialHelper.convertToMetric(weight):weight);
+                post.setPostValue((SharedPrefsHelper.getImperial(getBaseContext()))? UnitsHelper.convertToMetricWeight(weight):weight);
                 post.setContainerID(databaseReference.push().getKey());
                 post.setDate(new Date());
 

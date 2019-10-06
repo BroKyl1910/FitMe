@@ -14,13 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -29,7 +27,6 @@ import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class ProgressWeightFragment extends Fragment {
@@ -90,9 +87,9 @@ public class ProgressWeightFragment extends Fragment {
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                         LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
                         boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
-                        double goalWeight = (isImperial)?ImperialHelper.convertToImperial(finalUser.getWeightGoal()):finalUser.getWeightGoal();
+                        double goalWeight = (isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeightGoal()):finalUser.getWeightGoal();
                         for(int i = 0; i < posts.size(); i++){
-                            double weight = (isImperial)?ImperialHelper.convertToImperial(posts.get(i).getPostValue()):posts.get(i).getPostValue();
+                            double weight = (isImperial)? UnitsHelper.convertToImperialWeight(posts.get(i).getPostValue()):posts.get(i).getPostValue();
                             series.appendData(new DataPoint(i+1, weight), true, posts.size());
                             goal.appendData(new DataPoint(i+1, goalWeight), true, posts.size());
                         }

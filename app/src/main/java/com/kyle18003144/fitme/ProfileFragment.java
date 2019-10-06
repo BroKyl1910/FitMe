@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -30,7 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import static android.widget.LinearLayout.VERTICAL;
-import static com.kyle18003144.fitme.ImperialHelper.convertToImperialLbs;
+import static com.kyle18003144.fitme.UnitsHelper.convertToImperialHeightIn;
+import static com.kyle18003144.fitme.UnitsHelper.convertToImperialLbs;
 
 
 public class ProfileFragment extends Fragment {
@@ -39,6 +38,8 @@ public class ProfileFragment extends Fragment {
     TextView txtEmail;
     TextView txtStepGoal;
     TextView txtWeightGoal;
+    TextView txtHeight;
+    TextView txtBMI;
     LinearLayout lytCardHost;
     LinearLayout lyoutLabels;
 
@@ -57,6 +58,8 @@ public class ProfileFragment extends Fragment {
         txtEmail = rootView.findViewById(R.id.txtEmail);
         txtStepGoal = rootView.findViewById(R.id.txtStepGoal);
         txtWeightGoal = rootView.findViewById(R.id.txtWeightGoal);
+        txtHeight = rootView.findViewById(R.id.txtHeight);
+        txtBMI = rootView.findViewById(R.id.txtBMI);
         imgEdit = rootView.findViewById(R.id.imgEdit);
         lytCardHost = rootView.findViewById(R.id.lytCardHost);
         lyoutLabels = rootView.findViewById(R.id.lyoutLabels);
@@ -93,7 +96,9 @@ public class ProfileFragment extends Fragment {
                 txtName.setText(user.getFirstName()+" "+user.getSurname());
                 txtEmail.setText(user.getEmail());
                 txtStepGoal.setText(user.getFootstepsGoal()+"");
-                txtWeightGoal.setText(((isImperial)? convertToImperialLbs(user.getWeightGoal()):user.getWeightGoal()+" kg"));
+                txtWeightGoal.setText(((isImperial)? convertToImperialLbs(user.getWeightGoal()):UnitsHelper.formatMetricWeight(user.getWeightGoal())));
+                txtHeight.setText(((isImperial)? convertToImperialHeightIn(user.getHeight()):UnitsHelper.formatMetricHeight(user.getHeight())));
+                txtBMI.setText(calcBMI(user.getWeight(), user.getHeight())+"");
                 lyoutLabels.setVisibility(View.VISIBLE);
 
                 DatabaseReference postReference = database.getReference("Post");
@@ -130,7 +135,7 @@ public class ProfileFragment extends Fragment {
                             postLayout.addView(txtTitle);
 
                             TextView txtProgress = new TextView(rootView.getContext());
-                            String weight = (isImperial)? convertToImperialLbs(post.getPostValue()):post.getPostValue()+" kg";
+                            String weight = (isImperial)? convertToImperialLbs(post.getPostValue()):UnitsHelper.formatMetricWeight(post.getPostValue());
                             txtProgress.setText("Weight Progress: "+ weight);
                             LinearLayout.LayoutParams txtProgressParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             txtProgressParams.topMargin = 8;
@@ -188,5 +193,11 @@ public class ProfileFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private int calcBMI(double weight, double height) {
+        int kg = (int) weight;
+        height /= 100;
+        return (int)(kg/(height*height));
     }
 }
