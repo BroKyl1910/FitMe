@@ -136,7 +136,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
 
 
                             databaseReference.child(containerID).setValue(appUser);
-                            Toast.makeText(getBaseContext(),"Upload successful", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(),"Registration successful", Toast.LENGTH_LONG).show();
 
                             Intent i = new Intent(RegisterPersonalActivity.this, MainFragmentHostActivity.class);
                             startActivity(i);

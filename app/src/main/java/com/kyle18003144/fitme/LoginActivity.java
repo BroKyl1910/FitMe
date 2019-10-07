@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getBaseContext(), "Login Failed", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "Invalid username or password", Toast.LENGTH_LONG).show();
                         }
 
                     }
