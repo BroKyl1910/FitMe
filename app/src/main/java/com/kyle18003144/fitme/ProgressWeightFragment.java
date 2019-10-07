@@ -84,9 +84,12 @@ public class ProgressWeightFragment extends Fragment {
                         }
 
                         boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
+
                         GraphView graphView = rootView.findViewById(R.id.grphWeight);
                         LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
                         LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
+
+                        //Display goal and weights. First weight should be their starting weight
                         double startingWeight = ((isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeight()):finalUser.getWeight());
                         series.appendData(new DataPoint(0, startingWeight), true, posts.size()+1);
                         double goalWeight = (isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeightGoal()):finalUser.getWeightGoal();
@@ -116,6 +119,8 @@ public class ProgressWeightFragment extends Fragment {
                         GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
                         gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.NONE);
                         gridLabelRenderer.setHorizontalLabelsVisible(false);
+
+                        //Format label to show lbs or kg
                         gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
                             @Override
                             public String formatLabel(double value, boolean isValueX) {
@@ -129,6 +134,7 @@ public class ProgressWeightFragment extends Fragment {
                             }
                         });
 
+                        //Don't show empty graph, it looks weird
                         if(posts.size() > 0){
                             graphView.setVisibility(View.VISIBLE);
                         }

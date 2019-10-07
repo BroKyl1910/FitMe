@@ -21,6 +21,8 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        //Automatically login if there is already an authenticated user and they did not specify that they don't want to be auto-logged in
         if(firebaseAuth.getCurrentUser() != null && SharedPrefsHelper.getRememberMe(getBaseContext())){
             Intent i = new Intent(SplashActivity.this, MainFragmentHostActivity.class);
             startActivity(i);

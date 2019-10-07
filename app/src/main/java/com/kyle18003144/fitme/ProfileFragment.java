@@ -98,11 +98,11 @@ public class ProfileFragment extends Fragment {
                 txtStepGoal.setText(user.getFootstepsGoal()+"");
                 txtWeightGoal.setText(((isImperial)? convertToImperialLbs(user.getWeightGoal()):UnitsHelper.formatMetricWeight(user.getWeightGoal())));
                 txtHeight.setText(((isImperial)? convertToImperialHeightIn(user.getHeight()):UnitsHelper.formatMetricHeight(user.getHeight())));
-                txtBMI.setText(calcBMI(user.getWeight(), user.getHeight())+"");
                 lyoutLabels.setVisibility(View.VISIBLE);
 
                 DatabaseReference postReference = database.getReference("Post");
 
+                final AppUser finalUser = user;
                 postReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -116,6 +116,8 @@ public class ProfileFragment extends Fragment {
 
                         //Show posts in the order of newest first
                         Collections.reverse(posts);
+                        //Calculate BMI based on initial height but latest weight
+                        txtBMI.setText(calcBMI(posts.get(0).getPostValue(), finalUser.getHeight())+"");
 
                         for (AppPost post : posts){
                             LinearLayout postLayout = new LinearLayout(rootView.getContext());

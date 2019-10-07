@@ -46,6 +46,8 @@ public class RegisterPersonalActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("User");
+        //Reset setting in case there was another active account that changed this
+        SharedPrefsHelper.setImperial(getBaseContext(), false);
 
         intent = getIntent();
 
@@ -62,6 +64,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Keep data filled in in first registration page
                 Intent i = new Intent(RegisterPersonalActivity.this, RegisterActivity.class);
                 i.putExtra("email", intent.getStringExtra("email"));
                 i.putExtra("password", intent.getStringExtra("password"));
@@ -70,6 +73,7 @@ public class RegisterPersonalActivity extends AppCompatActivity {
             }
         });
 
+        //Allow user to choose metric or imperial
         swtchImperial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

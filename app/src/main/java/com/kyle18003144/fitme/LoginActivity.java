@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -58,8 +59,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
+                if(!email.equals("") && !password.equals("")){
+                    tryLogin(email, password);
+                } else{
+                    Toast.makeText(LoginActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                }
 
-                tryLogin(email, password);
             }
         });
 
