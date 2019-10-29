@@ -2,6 +2,7 @@ package com.kyle18003144.fitme;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
+
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,9 +43,8 @@ public class ProfileFragment extends Fragment {
     TextView txtWeightGoal;
     TextView txtHeight;
     TextView txtBMI;
-    LinearLayout lytCardHost;
     LinearLayout lyoutLabels;
-
+    RecyclerView recyclerView;
     ImageView imgEdit;
 
     boolean isImperial;
@@ -61,8 +63,8 @@ public class ProfileFragment extends Fragment {
         txtHeight = rootView.findViewById(R.id.txtHeight);
         txtBMI = rootView.findViewById(R.id.txtBMI);
         imgEdit = rootView.findViewById(R.id.imgEdit);
-        lytCardHost = rootView.findViewById(R.id.lytCardHost);
         lyoutLabels = rootView.findViewById(R.id.lyoutLabels);
+        recyclerView = rootView.findViewById(R.id.profileRecyclerView);
 
         //Get user
         FirebaseAuth mAuth;
@@ -123,66 +125,10 @@ public class ProfileFragment extends Fragment {
                             //Calculate BMI based on initial height but latest weight
                             txtBMI.setText(calcBMI(posts.get(0).getPostValue(), finalUser.getHeight()) + "");
                         }
-                        for (AppPost post : posts) {
-                            LinearLayout postLayout = new LinearLayout(rootView.getContext());
-                            postLayout.setOrientation(VERTICAL);
-                            postLayout.setBackgroundResource(R.color.colorPrimary);
-                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            layoutParams.bottomMargin = 16;
-                            int padding = (int) rootView.getResources().getDimension(R.dimen.appbar_padding);
-                            postLayout.setPadding(padding, padding, padding, padding);
-                            postLayout.setLayoutParams(layoutParams);
 
-                            TextView txtTitle = new TextView(rootView.getContext());
-                            txtTitle.setText(post.getTitle());
-                            ViewGroup.LayoutParams txtTitleParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            txtTitle.setLayoutParams(txtTitleParams);
-                            txtTitle.setTextAppearance(rootView.getContext(), R.style.TextAppearance_MaterialComponents_Headline6);
-                            postLayout.addView(txtTitle);
+                        recyclerView.setAdapter(new RecyclerViewAdapterProfile(getContext(), posts));
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                            TextView txtProgress = new TextView(rootView.getContext());
-                            String weight = (isImperial) ? convertToImperialLbs(post.getPostValue()) : UnitsHelper.formatMetricWeight(post.getPostValue());
-                            txtProgress.setText("Weight Progress: " + weight);
-                            LinearLayout.LayoutParams txtProgressParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            txtProgressParams.topMargin = 8;
-                            txtProgress.setLayoutParams(txtProgressParams);
-                            txtProgress.setTextAppearance(rootView.getContext(), R.style.TextAppearance_MaterialComponents_Body1);
-                            postLayout.addView(txtProgress);
-
-                            TextView txtBody = new TextView(rootView.getContext());
-                            txtBody.setText(post.getPostBody());
-                            LinearLayout.LayoutParams txtBodyParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            txtBodyParams.topMargin = 8;
-                            txtBody.setLayoutParams(txtBodyParams);
-                            txtBody.setTextAppearance(rootView.getContext(), R.style.TextAppearance_MaterialComponents_Body2);
-                            postLayout.addView(txtBody);
-
-                            if (post.getPostImageURI() != null) {
-                                final ImageView imgImage = new ImageView(rootView.getContext());
-                                LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 500);
-                                imgParams.topMargin = 8;
-                                imgParams.gravity = Gravity.CENTER;
-                                imgImage.setLayoutParams(imgParams);
-
-                                Picasso.get().load(post.getPostImageURI()).into(imgImage);
-                                postLayout.addView(imgImage);
-                            }
-
-                            TextView txtDate = new TextView(rootView.getContext());
-                            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                            String dateStr = formatter.format(post.getDate());
-                            txtDate.setText(dateStr);
-                            LinearLayout.LayoutParams txtDateParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            txtDateParams.topMargin = 100;
-                            txtDate.setLayoutParams(txtDateParams);
-                            txtDate.setTextAppearance(rootView.getContext(), R.style.TextAppearance_MaterialComponents_Body2);
-                            postLayout.addView(txtDate);
-
-
-                            lytCardHost.addView(postLayout);
-
-
-                        }
                     }
 
                     @Override

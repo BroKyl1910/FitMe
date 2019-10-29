@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/parentLayout"
+    android:background="@color/colorPrimary"
+    android:layout_marginTop="8dp"
+    android:padding="@dimen/appbar_padding">
+
+    <TextView
+        android:id="@+id/txtPostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        android:text="Title"/>
+
+    <TextView
+        android:id="@+id/txtPostProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_marginTop="8dp"
+        android:text="Weight Progress:"/>
+
+    <TextView
+        android:id="@+id/txtPostBody"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:layout_marginTop="8dp"
+        android:text="Post body goes here"/>
+
+    <ImageView
+        android:id="@+id/imgPostImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/txtPostDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:text="Date"/>
+
+
+</LinearLayout>
