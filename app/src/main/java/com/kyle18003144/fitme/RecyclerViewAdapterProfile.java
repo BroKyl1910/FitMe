@@ -57,8 +57,12 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
         AppPost post = posts.get(position);
 
         txtPostTitle.setText(post.getTitle());
-        String weight = (SharedPrefsHelper.getImperial(context)) ? convertToImperialLbs(post.getPostValue()) : UnitsHelper.formatMetricWeight(post.getPostValue());
-        txtPostProgress.setText("Weight Progress: " + weight);
+        if(post.getPostType() == PostType.WEIGHT) {
+            String weight = (SharedPrefsHelper.getImperial(context)) ? convertToImperialLbs(post.getPostValue()) : UnitsHelper.formatMetricWeight(post.getPostValue());
+            txtPostProgress.setText("Weight Progress: " + weight);
+        }else{
+            txtPostProgress.setText("Footsteps: "+post.getPostValue());
+        }
         txtPostBody.setText(post.getPostBody());
         if (post.getPostImageURI() != null) {
             Picasso.get().load(posts.get(position).getPostImageURI()).into(imgPostImage);

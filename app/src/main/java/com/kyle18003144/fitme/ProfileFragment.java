@@ -119,11 +119,16 @@ public class ProfileFragment extends Fragment {
                         Collections.reverse(posts);
 
                         if (posts.size() == 0) {
-                            //Show posts in the order of newest first
+                            //Calculate BMI based on initial height but latest weight
                             txtBMI.setText(calcBMI(finalUser.getWeight(), finalUser.getHeight()) + "");
                         } else {
-                            //Calculate BMI based on initial height but latest weight
-                            txtBMI.setText(calcBMI(posts.get(0).getPostValue(), finalUser.getHeight()) + "");
+                            //Show posts in the order of newest first
+                            for(AppPost post:posts){
+                                if(post.getPostType()==PostType.WEIGHT){
+                                    txtBMI.setText(calcBMI(post.getPostValue(), finalUser.getHeight()) + "");
+                                }
+                            }
+
                         }
 
                         recyclerView.setAdapter(new RecyclerViewAdapterProfile(getContext(), posts));

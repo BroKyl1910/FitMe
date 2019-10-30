@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -17,6 +19,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MainFragmentHostActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SensorEventListener {
 
@@ -60,6 +69,7 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+
         boolean specificFragment = getIntent().getIntExtra("fragment", -1) != -1;
         if (savedInstanceState == null && !specificFragment) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
@@ -87,6 +97,21 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         }
     }
 
+    private void scheduleFootstepUpload() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(System.currentTimeMillis());//set the current time and date for this calendar
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+//        timeInMilliseconds = System.currentTimeMillis() + 5000;
+        Intent intent = new Intent(this, FootstepsBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 234324243, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 24*60*60*1000,pendingIntent);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -97,6 +122,8 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        scheduleFootstepUpload();
     }
 
     @Override
@@ -172,6 +199,7 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
     public void onSensorChanged(SensorEvent e) {
         if (e.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             numSteps = (int) e.values[0];// - counterSteps;
+            SharedPrefsHelper.setFootsteps(getBaseContext(), numSteps);
             updateUI();
         }
     }
