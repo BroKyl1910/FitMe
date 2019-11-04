@@ -97,6 +97,9 @@ public class AppUser {
     }
 
     public ArrayList<String> getFollowing() {
+        if(following == null){
+            return new ArrayList<>();
+        }
         return following;
     }
 
@@ -105,6 +108,9 @@ public class AppUser {
     }
 
     public ArrayList<String> getFollowers() {
+        if(followers == null){
+            return new ArrayList<>();
+        }
         return followers;
     }
 
@@ -131,6 +137,7 @@ public class AppUser {
     }
 
     public boolean isFollowing(String user) {
+        if(following == null) return false;
         return following.contains(user);
     }
 

@@ -43,7 +43,6 @@
         </receiver>
 
 
-        1
     </application>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 

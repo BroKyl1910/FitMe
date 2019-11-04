@@ -43,6 +43,8 @@ public class ProfileFragment extends Fragment {
     TextView txtWeightGoal;
     TextView txtHeight;
     TextView txtBMI;
+    TextView txtFollowers;
+    TextView txtFollowing;
     LinearLayout lyoutLabels;
     RecyclerView recyclerView;
     ImageView imgEdit;
@@ -62,6 +64,8 @@ public class ProfileFragment extends Fragment {
         txtWeightGoal = rootView.findViewById(R.id.txtWeightGoal);
         txtHeight = rootView.findViewById(R.id.txtHeight);
         txtBMI = rootView.findViewById(R.id.txtBMI);
+        txtFollowing = rootView.findViewById(R.id.txtFollowing);
+        txtFollowers= rootView.findViewById(R.id.txtFollowers);
         imgEdit = rootView.findViewById(R.id.imgEdit);
         lyoutLabels = rootView.findViewById(R.id.lyoutLabels);
         recyclerView = rootView.findViewById(R.id.profileRecyclerView);
@@ -100,6 +104,8 @@ public class ProfileFragment extends Fragment {
                 txtStepGoal.setText(user.getFootstepsGoal() + "");
                 txtWeightGoal.setText(((isImperial) ? convertToImperialLbs(user.getWeightGoal()) : UnitsHelper.formatMetricWeight(user.getWeightGoal())));
                 txtHeight.setText(((isImperial) ? convertToImperialHeightIn(user.getHeight()) : UnitsHelper.formatMetricHeight(user.getHeight())));
+                txtFollowers.setText(user.getFollowers().size()+"");
+                txtFollowing.setText(user.getFollowing().size()+"");
                 lyoutLabels.setVisibility(View.VISIBLE);
 
                 DatabaseReference postReference = database.getReference("Post");
@@ -116,7 +122,7 @@ public class ProfileFragment extends Fragment {
                             }
                         }
                         //When footsteps are saved, need separate loop to get only weight posts
-                        Collections.reverse(posts);
+                        Collections.sort(posts);
 
                         if (posts.size() == 0) {
                             //Calculate BMI based on initial height but latest weight

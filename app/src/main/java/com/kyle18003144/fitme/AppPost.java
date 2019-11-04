@@ -5,7 +5,7 @@ import android.net.Uri;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class AppPost {
+public class AppPost  implements Comparable<AppPost> {
     private String containerID;
     private String email;
     private String title;
@@ -91,5 +91,10 @@ public class AppPost {
 
     public void setPostImageURI(String postImageURI) {
         this.postImageURI = postImageURI;
+    }
+
+    //When sorting, I want posts ordered by their date in descending order
+    public int compareTo(AppPost appPost){
+        return appPost.getDate().compareTo(date);
     }
 }
