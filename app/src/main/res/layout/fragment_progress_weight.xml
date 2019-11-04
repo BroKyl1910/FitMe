@@ -35,12 +35,11 @@
         </LinearLayout>
 
 
-    <com.jjoe64.graphview.GraphView
-        android:visibility="invisible"
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/grphWeight"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"/>
 
 
 </LinearLayout>

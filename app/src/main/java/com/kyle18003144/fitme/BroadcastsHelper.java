@@ -36,10 +36,6 @@ public class BroadcastsHelper {
         alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds,pendingIntent);
     }
 
-    public static void addShutdownBroadcastListener(Context context){
-//        context.registerReceiver(ShutdownReceiver.class, new IntentFilter(Intent.ACTION_SHUTDOWN));
-    }
-
 //    public static void scheduleFirstFootstepUpload(Context context) {
 //        Calendar cal = new GregorianCalendar();
 //        cal.setTimeInMillis(System.currentTimeMillis());//set the current time and date for this calendar
@@ -47,7 +43,7 @@ public class BroadcastsHelper {
 //        cal.set(Calendar.MINUTE, 53);
 //        cal.set(Calendar.SECOND, 0);
 //        cal.set(Calendar.MILLISECOND, 0);
-//        long timeInMilliseconds = System.currentTimeMillis() + 5000;
+//        long timeInMilliseconds = System.currentTimeMillis() + 10000;
 //        Intent intent = new Intent(context, FootstepsBroadcastReceiver.class);
 //        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 234324243, intent, 0);
 //        AlarmManager alarmManager = (AlarmManager)context.getSystemService(ALARM_SERVICE);

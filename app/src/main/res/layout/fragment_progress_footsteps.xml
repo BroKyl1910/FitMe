@@ -4,12 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <com.jjoe64.graphview.GraphView
-        android:visibility="invisible"
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/grphFootsteps"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_margin="16dp" />
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"/>
 
 
 </LinearLayout>

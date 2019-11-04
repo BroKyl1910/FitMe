@@ -2,6 +2,7 @@ package com.kyle18003144.fitme;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.DefaultAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +36,12 @@ import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 public class ProgressWeightFragment extends Fragment {
@@ -61,9 +76,9 @@ public class ProgressWeightFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 AppUser user = new AppUser();
-                for(DataSnapshot child: dataSnapshot.getChildren()){
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
                     user = child.getValue(AppUser.class);
-                    if(user.getEmail().equals(userEmail)){
+                    if (user.getEmail().equals(userEmail)) {
                         break;
                     }
                 }
@@ -76,71 +91,99 @@ public class ProgressWeightFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         ArrayList<AppPost> posts = new ArrayList<>();
-                        for(DataSnapshot child: dataSnapshot.getChildren()){
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
                             AppPost post = child.getValue(AppPost.class);
-                            if(post.getEmail().equals(userEmail) && post.getPostType()==PostType.WEIGHT){
+                            if (post.getEmail().equals(userEmail) && post.getPostType() == PostType.WEIGHT) {
                                 posts.add(post);
                             }
                         }
 
                         boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
+//                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-                        GraphView graphView = rootView.findViewById(R.id.grphWeight);
-                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>();
-                        LineGraphSeries<DataPoint> goal = new LineGraphSeries<>();
+                        if (!posts.isEmpty()) {
+                            LineChart lineChart = rootView.findViewById(R.id.grphWeight);
+                            lineChart.invalidate();
+                            ArrayList<Entry> series = new ArrayList<>();
+                            ArrayList<Entry> goal = new ArrayList<>();
 
-                        //Display goal and weights. First weight should be their starting weight
-                        double startingWeight = ((isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeight()):finalUser.getWeight());
-                        series.appendData(new DataPoint(0, startingWeight), true, posts.size()+1);
-                        double goalWeight = (isImperial)? UnitsHelper.convertToImperialWeight(finalUser.getWeightGoal()):finalUser.getWeightGoal();
-                        goal.appendData(new DataPoint(0, goalWeight), true, posts.size()+1);
-                        for(int i = 0; i < posts.size(); i++){
-                            double weight = (isImperial)? UnitsHelper.convertToImperialWeight(posts.get(i).getPostValue()):posts.get(i).getPostValue();
-                            series.appendData(new DataPoint(i+1, weight), true, posts.size());
-                            goal.appendData(new DataPoint(i+1, goalWeight), true, posts.size());
-                        }
+                            //Display goal and weights. First weight should be their starting weight
+                            double startingWeight = ((isImperial) ? UnitsHelper.convertToImperialWeight(finalUser.getWeight()) : finalUser.getWeight());
+                            series.add(new Entry(0, (float) startingWeight));
 
-                        graphView.addSeries(series);
-                        graphView.addSeries(goal);
+                            double goalWeight = (isImperial) ? UnitsHelper.convertToImperialWeight(finalUser.getWeightGoal()) : finalUser.getWeightGoal();
+                            goal.add(new Entry(0, (float) goalWeight));
 
-                        series.setColor(Color.CYAN);
-                        series.setTitle("Weight");
-                        series.setDrawDataPoints(true);
-                        series.setThickness(2);
-
-                        goal.setColor(Color.GREEN);
-                        goal.setThickness(2);
-                        goal.setTitle("Goal");
-
-                        graphView.getLegendRenderer().setVisible(true);
-                        graphView.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
-                        graphView.getLegendRenderer().setSpacing(16);
-
-                        GridLabelRenderer gridLabelRenderer = graphView.getGridLabelRenderer();
-                        gridLabelRenderer.setGridStyle(GridLabelRenderer.GridStyle.NONE);
-                        gridLabelRenderer.setHorizontalLabelsVisible(false);
-
-                        //Format label to show lbs or kg
-                        gridLabelRenderer.setLabelFormatter(new DefaultLabelFormatter() {
-                            @Override
-                            public String formatLabel(double value, boolean isValueX) {
-                                if (isValueX) {
-                                    // show normal x values
-                                    return super.formatLabel(value, isValueX);
-                                } else {
-                                    // show currency for y values
-                                    return super.formatLabel(value, isValueX) + " "+(SharedPrefsHelper.getImperial(rootView.getContext())?"lbs":"kg");
-                                }
+                            for (int i = 0; i < posts.size(); i++) {
+                                double weight = (isImperial) ? UnitsHelper.convertToImperialWeight(posts.get(i).getPostValue()) : posts.get(i).getPostValue();
+                                series.add(new Entry(i + 1, (float) weight));
                             }
-                        });
+                            goal.add(new Entry(posts.size(), (float) goalWeight));
 
-                        //Don't show empty graph, it looks weird
-                        if(posts.size() > 0){
-                            graphView.setVisibility(View.VISIBLE);
+                            LineDataSet weightSet;
+                            LineDataSet goalSet;
+
+                            weightSet = new LineDataSet(series, "Weight");
+                            weightSet.setDrawIcons(true);
+                            weightSet.enableDashedLine(10f, 5f, 0f);
+                            weightSet.enableDashedHighlightLine(10f, 5f, 0f);
+                            weightSet.setColor(Color.WHITE);
+                            weightSet.setCircleColor(Color.WHITE);
+                            weightSet.setLineWidth(1f);
+                            weightSet.setCircleRadius(3f);
+                            weightSet.setDrawCircleHole(true);
+                            weightSet.setValueTextSize(9f);
+                            weightSet.setValueTextColor(Color.WHITE);
+                            weightSet.setDrawFilled(true);
+                            weightSet.setFormLineWidth(1f);
+                            weightSet.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                            weightSet.setFormSize(15.f);
+
+                            goalSet = new LineDataSet(goal, "Goal");
+                            goalSet.setDrawIcons(false);
+                            goalSet.enableDashedLine(10f, 5f, 0f);
+                            goalSet.enableDashedHighlightLine(10f, 5f, 0f);
+                            goalSet.setColor(Color.YELLOW);
+                            goalSet.setLineWidth(1f);
+                            goalSet.setCircleRadius(1f);
+                            goalSet.setDrawCircleHole(true);
+                            goalSet.setValueTextSize(9f);
+                            goalSet.setValueTextColor(Color.YELLOW);
+                            goalSet.setDrawFilled(false);
+                            goalSet.setFormLineWidth(1f);
+                            goalSet.setFormLineDashEffect(new DashPathEffect(new float[]{10f, 5f}, 0f));
+                            goalSet.setFormSize(15.f);
+
+                            XAxis xAxis = lineChart.getXAxis();
+                            xAxis.setValueFormatter(new IAxisValueFormatter() {
+                                @Override
+                                public String getFormattedValue(float value, AxisBase axis) {
+                                    long millis = TimeUnit.DAYS.toMillis((long) value);
+                                    Date d = new Date(Float.valueOf(value).longValue());
+                                    String date = new SimpleDateFormat("MM-dd-yyyy").format(millis);
+                                    return date;
+                                }
+                            });
+
+
+                            lineChart.getXAxis().setTextColor(Color.WHITE);
+                            lineChart.getAxisLeft().setTextColor(Color.WHITE);
+                            lineChart.getAxisRight().setTextColor(Color.WHITE);
+                            lineChart.getLegend().setTextColor(Color.WHITE);
+                            lineChart.getDescription().setEnabled(false);
+
+                            lineChart.getXAxis().setEnabled(false);
+                            lineChart.getAxisRight().setEnabled(false);
+
+                            ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+                            dataSets.add(weightSet);
+                            dataSets.add(goalSet);
+                            LineData data = new LineData(dataSets);
+                            lineChart.setData(data);
                         }
-
 
                     }
+
 
                     @Override
                     public void onCancelled(DatabaseError error) {
@@ -148,7 +191,6 @@ public class ProgressWeightFragment extends Fragment {
                         Log.w("TAG", "Failed to read value.", error.toException());
                     }
                 });
-
             }
 
             @Override
@@ -156,8 +198,6 @@ public class ProgressWeightFragment extends Fragment {
 
             }
         });
-
-
 
 
         return rootView;
