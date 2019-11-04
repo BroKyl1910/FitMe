@@ -73,12 +73,6 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
         String dateStr = formatter.format(post.getDate());
         txtPostDate.setText(dateStr);
 
-//        parentLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(context, labels.get(position), Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     @Override

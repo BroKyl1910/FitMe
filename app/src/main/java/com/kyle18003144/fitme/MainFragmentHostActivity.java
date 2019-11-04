@@ -111,9 +111,9 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 toolbar.setTitle("My Profile");
                 break;
-            case R.id.nav_friends:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FriendsFragment()).commit();
-                toolbar.setTitle("Friends");
+            case R.id.nav_search:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SearchFragment()).commit();
+                toolbar.setTitle("Search");
                 break;
             case R.id.nav_progress:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProgressFragment()).commit();

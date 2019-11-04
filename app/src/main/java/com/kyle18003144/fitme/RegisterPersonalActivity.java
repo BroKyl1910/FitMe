@@ -19,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class RegisterPersonalActivity extends AppCompatActivity {
 
     EditText edtFirstName;
@@ -136,6 +138,8 @@ public class RegisterPersonalActivity extends AppCompatActivity {
                             appUser.setWeight((useImperial)?UnitsHelper.convertToMetricWeight(Integer.parseInt(edtWeight.getText().toString())):Integer.parseInt(edtWeight.getText().toString()));
                             appUser.setWeightGoal((useImperial)?UnitsHelper.convertToMetricWeight(Integer.parseInt(edtIdealWeight.getText().toString())):Integer.parseInt(edtIdealWeight.getText().toString()));
                             appUser.setFootstepsGoal(Integer.parseInt(edtIdealFootsteps.getText().toString()));
+                            appUser.setFollowers(new ArrayList<String>());
+                            appUser.setFollowing(new ArrayList<String>());
                             appUser.setContainerID(containerID);
 
 
