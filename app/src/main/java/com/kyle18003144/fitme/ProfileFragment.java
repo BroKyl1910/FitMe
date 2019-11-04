@@ -126,6 +126,7 @@ public class ProfileFragment extends Fragment {
                             for(AppPost post:posts){
                                 if(post.getPostType()==PostType.WEIGHT){
                                     txtBMI.setText(calcBMI(post.getPostValue(), finalUser.getHeight()) + "");
+                                    break;
                                 }
                             }
 
