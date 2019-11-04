@@ -11,10 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.kyle18003144.fitme.UnitsHelper.convertToImperialLbs;
 
@@ -25,6 +31,7 @@ public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.V
     Context context;
     ViewHolder viewHolder;
     ArrayList<AppPost> posts = new ArrayList<>();
+    HashMap<String, String> emailNameHashMap;
 
     TextView txtName;
     TextView txtPostTitle;
@@ -33,13 +40,14 @@ public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.V
     ImageView imgPostImage;
     TextView txtPostDate;
 
-    public RecyclerViewAdapterFeed(Context context, ArrayList<AppPost> posts) {
+    public RecyclerViewAdapterFeed(Context context, ArrayList<AppPost> posts, HashMap<String, String> emailNameHashMap) {
         this.context = context;
         this.posts = posts;
+
+        this.emailNameHashMap = emailNameHashMap;
+
     }
 
-    public RecyclerViewAdapterFeed() {
-    }
 
     @NonNull
     @Override
@@ -52,10 +60,11 @@ public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         //Code to populate recycler view with posts
-        AppPost post = posts.get(position);
-        txtName.setText(post.getEmail());
+         AppPost post = posts.get(position);
+
+        txtName.setText(emailNameHashMap.get(post.getEmail()));
         txtPostTitle.setText(post.getTitle());
         if(post.getPostType() == PostType.WEIGHT) {
             String weight = (SharedPrefsHelper.getImperial(context)) ? convertToImperialLbs(post.getPostValue()) : UnitsHelper.formatMetricWeight(post.getPostValue());
@@ -72,6 +81,7 @@ public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.V
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String dateStr = formatter.format(post.getDate());
         txtPostDate.setText(dateStr);
+
 
     }
 

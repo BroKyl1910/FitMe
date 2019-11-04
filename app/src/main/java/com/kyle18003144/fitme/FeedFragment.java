@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.zip.Inflater;
 
 
@@ -44,13 +45,14 @@ public class FeedFragment extends Fragment{
         userReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final HashMap<String, String> emailNameHashMap = new HashMap<>();
                 AppUser currentUser = new AppUser();
                 // Find user in user db
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     AppUser user = child.getValue(AppUser.class);
+                    emailNameHashMap.put(user.getEmail(), user.getFirstName()+" "+ user.getSurname());
                     if (user.getEmail().equals(userEmail)) {
                         currentUser = user;
-                        break;
                     }
                 }
 
@@ -71,7 +73,7 @@ public class FeedFragment extends Fragment{
 
                         Collections.sort(allPosts);
 
-                        recyclerView.setAdapter(new RecyclerViewAdapterFeed(getContext(), allPosts));
+                        recyclerView.setAdapter(new RecyclerViewAdapterFeed(getContext(), allPosts, emailNameHashMap));
                         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     }
 
