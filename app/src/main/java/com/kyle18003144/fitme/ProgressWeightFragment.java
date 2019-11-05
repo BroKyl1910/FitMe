@@ -101,8 +101,8 @@ public class ProgressWeightFragment extends Fragment {
                         boolean isImperial = SharedPrefsHelper.getImperial(rootView.getContext());
 //                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
+                        LineChart lineChart = rootView.findViewById(R.id.grphWeight);
                         if (!posts.isEmpty()) {
-                            LineChart lineChart = rootView.findViewById(R.id.grphWeight);
                             lineChart.invalidate();
                             ArrayList<Entry> series = new ArrayList<>();
                             ArrayList<Entry> goal = new ArrayList<>();
@@ -180,6 +180,9 @@ public class ProgressWeightFragment extends Fragment {
                             dataSets.add(goalSet);
                             LineData data = new LineData(dataSets);
                             lineChart.setData(data);
+                        }
+                        else{
+                            lineChart.setNoDataText("No weight data to graph");
                         }
 
                     }

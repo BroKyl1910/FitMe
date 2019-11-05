@@ -88,8 +88,9 @@ public class ProgressFootstepsFragment extends Fragment {
                             }
                         }
 
+                        LineChart lineChart = rootView.findViewById(R.id.grphFootsteps);
+                        lineChart.setNoDataText("No weight data to graph");
                         if (!posts.isEmpty()) {
-                            LineChart lineChart = rootView.findViewById(R.id.grphFootsteps);
                             lineChart.setTouchEnabled(true);
                             lineChart.setPinchZoom(true);
                             lineChart.invalidate();
@@ -165,6 +166,8 @@ public class ProgressFootstepsFragment extends Fragment {
                             dataSets.add(goalSet);
                             LineData data = new LineData(dataSets);
                             lineChart.setData(data);
+                        }
+                        else{
                         }
                     }
 

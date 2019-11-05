@@ -16,6 +16,14 @@ public class AppPost  implements Comparable<AppPost> {
     private Date date;
 
     public AppPost() {
+       containerID = "";
+       email = "";
+       title = "";
+       postType = null;
+       postBody = "";
+       postValue = 0;
+       postImageURI = "";
+       date = null;
     }
 
     public AppPost(String containerID, String email, String title, PostType postType, String postBody, double postValue, String postImageURI, Date date) {

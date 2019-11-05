@@ -27,11 +27,11 @@ import static com.kyle18003144.fitme.UnitsHelper.convertToImperialLbs;
 
 public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    LinearLayout parentLayout;
-    Context context;
-    ViewHolder viewHolder;
-    ArrayList<AppPost> posts = new ArrayList<>();
     HashMap<String, String> emailNameHashMap;
+    ArrayList<AppPost> posts = new ArrayList<>();
+    Context context;
+    LinearLayout parentLayout;
+    ViewHolder viewHolder;
 
     TextView txtName;
     TextView txtPostTitle;
@@ -73,7 +73,7 @@ public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.V
             txtPostProgress.setText("Footsteps: "+post.getPostValue());
         }
         txtPostBody.setText(post.getPostBody());
-        if (post.getPostImageURI() != null) {
+        if (!post.getPostImageURI().equals("")) {
             Picasso.get().load(posts.get(position).getPostImageURI()).into(imgPostImage);
         } else {
             imgPostImage.setVisibility(View.GONE);
@@ -88,6 +88,16 @@ public class RecyclerViewAdapterFeed extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
