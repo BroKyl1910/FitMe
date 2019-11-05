@@ -150,6 +150,7 @@ public class MainFragmentHostActivity extends AppCompatActivity implements Navig
     public void onSensorChanged(SensorEvent e) {
         if (e.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             int totalSteps = (int) e.values[0];// - counterSteps;
+
             SharedPrefsHelper.setTodayFootsteps(getBaseContext(), totalSteps);
             SharedPrefsHelper.setDate(getBaseContext(), new Date());
             numSteps = totalSteps - SharedPrefsHelper.getPreviousFootsteps(getBaseContext());

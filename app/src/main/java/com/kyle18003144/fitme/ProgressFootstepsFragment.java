@@ -99,11 +99,12 @@ public class ProgressFootstepsFragment extends Fragment {
                             ArrayList<Entry> series = new ArrayList<>();
                             ArrayList<Entry> goal = new ArrayList<>();
 
+                            goal.add(new Entry(1, finalUser.getFootstepsGoal()));
                             //Display goal and weights. First weight should be their starting weight
                             for (int i = 0; i < posts.size(); i++) {
                                 series.add(new Entry(i + 1, (float) posts.get(i).getPostValue()));
-                                goal.add(new Entry(i + 1, finalUser.getFootstepsGoal()));
                             }
+                            goal.add(new Entry(posts.size(), finalUser.getFootstepsGoal()));
 
                             LineDataSet footstepsSet;
                             LineDataSet goalSet;

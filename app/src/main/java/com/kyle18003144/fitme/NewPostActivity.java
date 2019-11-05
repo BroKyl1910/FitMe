@@ -207,7 +207,7 @@ public class NewPostActivity extends AppCompatActivity implements IPickResult {
         edtWeight.setText((int)post.getPostValue() + "");
         if (!post.getPostImageURI().equals("")) {
             Picasso.get().load(post.getPostImageURI()).into(imgUserImage);
-
+            imgUserImage.setVisibility(View.VISIBLE);
         }
     }
 

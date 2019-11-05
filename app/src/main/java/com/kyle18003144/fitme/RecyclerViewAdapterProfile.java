@@ -71,7 +71,7 @@ public class RecyclerViewAdapterProfile extends RecyclerView.Adapter<RecyclerVie
             txtPostProgress.setText("Footsteps: "+post.getPostValue());
         }
         txtPostBody.setText(post.getPostBody());
-        if (post.getPostImageURI() != null) {
+        if (!post.getPostImageURI().equals("")) {
             Picasso.get().load(posts.get(position).getPostImageURI()).into(imgPostImage);
         } else {
             imgPostImage.setVisibility(View.GONE);
